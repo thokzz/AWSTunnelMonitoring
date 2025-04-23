@@ -14,6 +14,24 @@ This was developed with **zero prior coding experience** by leveraging AI tools 
 - **SSH Command Execution**: Securely execute recovery commands on VPN gateway
 - **Responsive Design**: Works on both desktop and mobile devices
 
+## 🌐 AWS Tunnel Monitoring Screenshots
+
+### 🧱 Architectural Diagram
+![Architectural Diagram](https://github.com/thokzz/AWSTunnelMonitoring/blob/main/Assets/AWSTunnel%20Architechtural%20Diagram.png?raw=true)
+
+### 🔁 Flow Diagram
+![Flow Diagram](https://github.com/thokzz/AWSTunnelMonitoring/blob/main/Assets/AWSTunnel%20Flow%20Diagram.png?raw=true)
+
+### 📊 Graph View
+![Graph View](https://github.com/thokzz/AWSTunnelMonitoring/blob/main/Assets/AWSTunnelMonitoring%20Graph%20View.png?raw=true)
+
+### 🧪 Send Command to Firewall
+![Send Command](https://github.com/thokzz/AWSTunnelMonitoring/blob/main/Assets/AWSTunnelMonitoring%20Send%20Command%20to%20Firewall.png?raw=true)
+
+### 📋 Table View
+![Table View](https://github.com/thokzz/AWSTunnelMonitoring/blob/main/Assets/AWSTunnelMonitoring%20Table%20View.png?raw=true)
+
+
 ## Tech Stack
 
 - **Backend**: Python with Flask
