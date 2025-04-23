@@ -43,16 +43,6 @@ This was developed with **zero prior coding experience** by leveraging AI tools 
 - **Monitoring**: Subprocess for ping operations
 - **Authentication**: Secure password handling for SSH operations
 
-## Screenshots
-
-### Graph View
-![Graph View](screenshots/graph-view.png)
-
-### Table View
-![Table View](screenshots/table-view.png)
-
-### Alert System
-![Alert System](screenshots/tunnel-down-alert.png)
 
 ## Installation Guide
 
