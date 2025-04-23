@@ -1,0 +1,17 @@
+#!/usr/bin/expect -f
+
+# Set timeout
+set timeout 10
+
+# Start a command that requires interaction
+spawn date
+
+# Print what we got
+expect {
+    -re ".*" {
+        puts "\nExpect is working! Received date output: $expect_out(0,string)"
+    }
+    timeout {
+        puts "\nTimeout occurred. Expect might not be working correctly."
+    }
+}

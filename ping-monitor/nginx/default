@@ -1,0 +1,15 @@
+server {
+    listen 80;
+    server_name your-server-ip;
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:5000/;
+        rewrite ^/api/?(.*)$ /$1 break;
+    }
+
+    location / {
+        root /scripts/ping-monitor/frontend/build;
+        index index.html;
+        try_files $uri /index.html;
+    }
+}

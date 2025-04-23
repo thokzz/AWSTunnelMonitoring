@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve ping monitor
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/scripts/ping-monitor/backend
+Environment="PATH=/scripts/ping-monitor/backend/venv/bin"
+ExecStart=/scripts/ping-monitor/backend/venv/bin/gunicorn -w 4 -b 0.0.0.0:5000 app:app
+
+[Install]
+WantedBy=multi-user.target
