@@ -1,0 +1,174 @@
+# VPN Tunnel Monitor - Frequently Asked Questions
+
+## General Questions
+
+### What does this application do?
+The VPN Tunnel Monitor is a real-time monitoring dashboard that continuously checks the health of VPN tunnels by pinging critical network endpoints. It displays latency metrics, alerts when tunnels fail, and provides a secure mechanism to execute recovery commands.
+
+### Who is this application for?
+This application is designed for network administrators, IT support staff, and operations teams who need to maintain reliable VPN connections to AWS or other cloud services. It's particularly useful for organizations without enterprise monitoring solutions.
+
+### Does it require specialized hardware?
+No, it can run on any standard Linux server. For production use, a dedicated small VM or instance is recommended, but the resource requirements are minimal.
+
+### Is this open source?
+Yes, you're free to use, modify, and distribute this code under the MIT License. All I ask is that you provide attribution if you share or adapt the work.
+
+## Technical Questions
+
+### How do I add more hosts to monitor?
+Edit the `TARGETS` list in `app.py`. You can add as many IP addresses as needed:
+
+```python
+TARGETS = ["172.20.3.108", "172.20.3.198", "172.20.2.201", "your-new-ip"]
+```
+
+### How do I change the display names of the IP addresses?
+Edit the `IP_TAGS` object in `App.js`:
+
+```javascript
+const IP_TAGS = {
+    "172.20.3.108": "Curator Service - 172.20.3.108",
+    "172.20.3.198": "Process Engine - 172.20.3.198",
+    "172.20.2.201": "Curator Gateway - 172.20.2.201",
+    "your-new-ip": "Your Custom Name"
+};
+```
+
+### How does the alert system determine when tunnels are down?
+The application monitors for consecutive ping failures across all targets. When all targets have failed for the specified number of consecutive pings (default is 5), the system declares the tunnels down and triggers an alert.
+
+### How secure is the password handling?
+The application takes several security measures:
+- Passwords are never stored long-term
+- Passwords are only transmitted over HTTPS (when properly configured)
+- The temporary script file containing the password is securely wiped
+- Password variables are cleared from memory after use
+- No password/credential data is logged
+
+### Can I customize the recovery commands?
+Yes, edit the expect script portion of the `reset_vpn_tunnels()` function in `app.py`. You can modify the SSH commands to match your specific VPN gateway requirements.
+
+### Why do I need the 'expect' utility?
+The expect utility allows for automated interaction with command-line programs that require user input, like SSH. It's used to securely handle the password and execution of recovery commands without manual intervention.
+
+### How much data history is retained?
+By default, the application stores 5 minutes (300 data points) of ping history for each monitored host. This can be adjusted by changing the `300` value in the `ping_host()` function in `app.py`.
+
+### Can I export the monitoring data?
+The current version doesn't include an export feature, but since the data is available via the `/ping_results` API endpoint, you could easily create a script to fetch and store this data for longer-term analysis.
+
+## Deployment Questions
+
+### How do I ensure the application starts after a server reboot?
+The systemd service configuration handles this automatically. When you set up the application using the provided `gunicorn.service` file and enable it with `sudo systemctl enable ping-monitor`, it will start automatically when the server boots.
+
+### Can I deploy this to Docker?
+Yes, although a Docker configuration isn't included by default. You would need to create a Dockerfile that:
+1. Uses a base image with Python and Node.js
+2. Installs the required packages
+3. Builds the React frontend
+4. Sets up Nginx and Gunicorn
+5. Exposes the appropriate ports
+
+### How do I set up HTTPS?
+For production use, it's recommended to set up HTTPS:
+1. Obtain an SSL certificate (Let's Encrypt is free)
+2. Configure Nginx to use SSL
+3. Use Certbot to automate the process:
+   ```bash
+   sudo apt install certbot python3-certbot-nginx
+   sudo certbot --nginx -d yourdomain.com
+   ```
+
+### What are the minimum server requirements?
+The application is lightweight and can run on minimal hardware:
+- CPU: 1 core
+- RAM: 1GB
+- Disk: 10GB
+- OS: Ubuntu 20.04 or newer
+
+## Development Questions
+
+### How can I contribute to this project?
+Contributions are welcome! Some potential improvements could include:
+- Adding data export functionality
+- Implementing user authentication
+- Creating a configuration UI
+- Adding more visualization options
+- Enhancing alert mechanisms (email, SMS, etc.)
+
+### How do I run the application in development mode?
+For development, you can run the frontend and backend separately:
+
+Backend:
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+python app.py
+```
+
+Frontend:
+```bash
+cd frontend
+npm install
+npm start
+```
+
+This will start the React development server on port 3000, which will proxy API requests to the Flask backend.
+
+### What's the architecture of the application?
+The application follows a typical modern web application architecture:
+- **Frontend**: React-based single-page application
+- **Backend**: Flask REST API
+- **Data Flow**: Frontend polls backend at regular intervals
+- **State Management**: React hooks for state
+- **Visualization**: Chart.js for graphs
+- **Styling**: Custom CSS with responsive design
+
+### How can I debug issues?
+Check these logs for troubleshooting:
+- Backend application log: `/var/log/ping-monitor.log`
+- Systemd service log: `sudo journalctl -u ping-monitor.service`
+- Nginx access log: `/var/log/nginx/access.log`
+- Nginx error log: `/var/log/nginx/error.log`
+
+## Portfolio Showcase Questions
+
+### Can I use this project in my portfolio?
+Yes! This project demonstrates several valuable skills:
+- Full-stack web development
+- Real-time data visualization
+- Secure credential handling
+- Production deployment
+- System monitoring concepts
+
+### What skills does this project demonstrate?
+This project showcases:
+- Frontend development with React
+- Backend development with Flask
+- Real-time data visualization
+- Secure operations automation
+- Linux service configuration
+- Production web server setup
+- API design and implementation
+- Responsive UI design
+
+### How can I extend this for my own portfolio?
+Consider these extensions to make the project more impressive:
+- Add email/SMS notifications
+- Implement user authentication
+- Add a historical data database
+- Create a mobile app version
+- Add predictive analytics for failure prediction
+
+### How did you build this with no coding experience?
+By leveraging AI tools like ChatGPT 4.0 and Claude 3.7 Sonnet, I was able to:
+1. Break down the problem into manageable components
+2. Generate code for each component
+3. Learn about the technologies as I built
+4. Debug issues with AI assistance
+5. Iterate until the solution was complete
+
+The key was focusing on understanding the code rather than just copying it, and building the application incrementally to ensure each part worked before moving on.
